@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Parse Console</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        function doPost() {
+            var postdata = {};
+            postdata.text = $("#Text").val();
+            $.ajax({
+                type: "post",
+                url: "./parse",
+                data: postdata,
+                success: function (json) {
+                    if (json.ErrorMessage) {
+                        alert(json.ErrorMessage);
+                    } else {
+                        $("#result").text(JSON.stringify(json));
+                    }
+                },
+                error: function (e) {
+                    $("#result").text("Error occured");
+                },
+                complete: function () {
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <textarea id="Text"></textarea> <input type="button" onclick="doPost();" value="submit" /><br />
+    </div>
+    <div id="result">
+
+    </div>
+</body>
+</html>

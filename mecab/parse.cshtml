@@ -1,0 +1,31 @@
+﻿@{
+    var startTime = Environment.TickCount;
+    var ret = new Dictionary<string, object>();
+    ret.Add("ErrorMessage", "");
+    try
+    {
+        var text = Request["text"] ?? "";
+        ret.Add("Original", text);
+        if (text == "")
+        {
+            ret["ErrorMessage"] = "no text";
+        }
+        else if(text.Length > 1000)
+        {
+            ret["ErrorMessage"] = "too long";
+        }
+        else
+        {
+            var nodes = MeCabService.parse(text);
+            ret.Add("Nodes", nodes);
+        }
+    }
+    catch(Exception ex)
+    {
+        ret["ErrorMessage"] = "error occured";
+    }
+    var totalTime = Environment.TickCount - startTime;
+    ret.Add("TotalTime", totalTime.ToString());
+    var jsonstring = Json.Encode(ret);
+    Response.Write(jsonstring);
+}
